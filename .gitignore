@@ -107,6 +107,6 @@ RNTester/Pods/*
 /ios/RNJSBase.xcodeproj/
 /ios/RNJSBase.xcworkspace/
 /ios/RNJSBaseTests/
-/ios/RNJSBase/
+# /ios/RNJSBase/
 /ios/RNJSBase.xcworkspace/
 /ios/Pods/
