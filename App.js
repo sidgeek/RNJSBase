@@ -87,6 +87,7 @@ export default class App extends Component<Props> {
 const styles = {
   container: {
     flex: 1,
+    marginTop: 40,
     backgroundColor: "#fff"
   }
 };
