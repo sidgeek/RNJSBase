@@ -1,27 +1,23 @@
 import React, { Component } from "react";
-import { View, Text, Animated, Easing } from "react-native";
+import { View, Text, Animated, Easing, Dimensions } from "react-native";
 import DataRow from "./DataRow";
+import PinchableImage from "./PinchableImage";
+
+const { height } = Dimensions.get("window");
 
 type Props = {};
 export default class BigCard extends Component<Props> {
   constructor(props) {
     super(props);
-    this.imageOpacityValue = new Animated.Value(0);
     this.titleTranslateYValue = new Animated.Value(0);
     this.titleScaleValue = new Animated.Value(0);
   }
 
   componentDidMount() {
-    this.imageOpacityValue.setValue(0);
     this.titleTranslateYValue.setValue(0);
     this.titleScaleValue.setValue(0);
 
     Animated.sequence([
-      Animated.timing(this.imageOpacityValue, {
-        toValue: 1,
-        duration: 1000,
-        easing: Easing.linear
-      }),
       Animated.timing(this.titleTranslateYValue, {
         toValue: 1,
         duration: 300,
@@ -38,18 +34,9 @@ export default class BigCard extends Component<Props> {
   render() {
     const { image, title, data } = this.props;
 
-    const imageOpacity = this.imageOpacityValue.interpolate({
-      inputRange: [0, 0.25, 0.5, 0.75, 1],
-      outputRange: [0, 0.25, 0.5, 0.75, 1]
-    });
-
-    const imageOpacityStyle = {
-      opacity: imageOpacity
-    };
-
     const titleMoveY = this.titleTranslateYValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, 280]
+      outputRange: [0, height / 2]
     });
 
     const titleScale = this.titleScaleValue.interpolate({
@@ -64,11 +51,7 @@ export default class BigCard extends Component<Props> {
     return (
       <View style={styles.container}>
         <View style={styles.mainContainer}>
-          <Animated.Image
-            source={image}
-            style={[styles.image, imageOpacityStyle]}
-            resizeMode={"contain"}
-          />
+          <PinchableImage image={image} />
           <Animated.View style={[styles.titleContainer, titleTransformStyle]}>
             <Text style={styles.title}>{title}</Text>
           </Animated.View>
@@ -110,10 +93,6 @@ const styles = {
     flex: 2,
     justifyContent: "flex-start",
     alignItems: "center"
-  },
-  image: {
-    width: 200,
-    height: 150
   },
   dataContainer: {
     flex: 2,
