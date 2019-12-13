@@ -1,3 +1,4 @@
+import React from "react";
 import { Animated, Easing } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
@@ -5,6 +6,7 @@ import { createAppContainer } from "react-navigation";
 import MainScreen from "./src/screens/Main";
 import ShareScreen from "./src/screens/Share";
 import DetailsScreen from "./src/screens/Details";
+import TrashScreen from "./src/screens/Trash";
 
 const transitionConfig = () => {
   return {
@@ -44,6 +46,9 @@ const MainStack = createStackNavigator(
     },
     Share: {
       screen: ShareScreen
+    },
+    Trash: {
+      screen: TrashScreen
     }
   },
   {
