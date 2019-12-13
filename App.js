@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { View, Animated } from "react-native";
 
 import pokemon from "./src/data/pokemon";
 import pokemon_stats from "./src/data/pokemon-stats";
@@ -8,10 +8,9 @@ import Header from "./src/components/Header";
 import CardList from "./src/components/CardList";
 import AnimatedModal from "./src/components/AnimatedModal";
 import BigCard from "./src/components/BigCard";
-
-function getRandomInt(max, min) {
-  return Math.floor(Math.random() * (max - min) + min);
-}
+import { getRandomInt } from "./src/lib/random";
+import { HEADER_MAX_HEIGHT } from "./src/settings/layout";
+import AnimatedHeader from "./src/components/AnimatedHeader";
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -22,6 +21,10 @@ export default class App extends Component<Props> {
   constructor(props) {
     super(props);
     this.pokemon_stats = [];
+
+    this.nativeScrollY = new Animated.Value(
+      Platform.OS === "ios" ? -HEADER_MAX_HEIGHT : 0
+    );
   }
 
   cardAction = () => {};
@@ -54,16 +57,30 @@ export default class App extends Component<Props> {
   };
 
   render() {
+    let nativeScrollY = Animated.add(
+      this.nativeScrollY,
+      Platform.OS === "ios" ? HEADER_MAX_HEIGHT : 0
+    );
+
     return (
       <View style={styles.container}>
-        <Header title={"Poke-Gallery"} />
-        <CardList
-          data={pokemon}
-          cardAction={this.cardAction}
-          viewAction={this.viewAction}
-          bookmarkAction={this.bookmarkAction}
-          shareAction={this.shareAction}
-        />
+        <AnimatedHeader title={"Poke-Gallery"} nativeScrollY={nativeScrollY} />
+        {this.nativeScrollY && (
+          <CardList
+            data={pokemon}
+            cardAction={this.cardAction}
+            viewAction={this.viewAction}
+            bookmarkAction={this.bookmarkAction}
+            shareAction={this.shareAction}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: this.nativeScrollY } } }],
+              {
+                useNativeDriver: true
+              }
+            )}
+          />
+        )}
+
         <AnimatedModal
           title={"View Pokemon"}
           visible={this.state.isModalVisible}
@@ -87,7 +104,7 @@ export default class App extends Component<Props> {
 const styles = {
   container: {
     flex: 1,
-    marginTop: 40,
+    // marginTop: 40,
     backgroundColor: "#fff"
   }
 };
