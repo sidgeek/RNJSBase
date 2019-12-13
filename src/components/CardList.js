@@ -23,7 +23,7 @@ const CardList = ({
         y: -HEADER_MAX_HEIGHT
       }}
     >
-      <View style={{ alignItems: "center" }}>
+      <View style={[styles.scroll_container]}>
         <FlatList
           data={data}
           renderItem={({ item }) => (
@@ -43,14 +43,14 @@ const CardList = ({
   );
 };
 
-export default CardList;
-
 const styles = {
   scroll: {
     flex: 1
   },
   scroll_container: {
     alignItems: "center",
-    paddingTop: Platform.OS == "android" ? HEADER_MAX_HEIGHT : 0
+    paddingTop: Platform.OS !== "ios" ? HEADER_MAX_HEIGHT : 0
   }
 };
+
+export default CardList;
