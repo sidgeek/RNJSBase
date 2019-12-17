@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "16.9.0",
     "react-native": "0.61.5",
+    "react-native-keychain": "^4.0.4",
     "yarn": "^6.6.0"
   },
   "devDependencies": {
